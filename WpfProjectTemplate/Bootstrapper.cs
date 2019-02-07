@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using AutoMapper;
 using Caliburn.Micro;
 using MahApps.Metro.Controls.Dialogs;
 using Unity;
@@ -26,10 +27,15 @@ namespace WpfProjectTemplate
 
         protected override void Configure()
         {
+            Mapper.Initialize(config =>
+            {
+
+            });
+
+            _container.RegisterInstance(Mapper.Instance);
             _container.RegisterSingleton<IEventAggregator, EventAggregator>();
             _container.RegisterInstance(DialogCoordinator.Instance);
             _container.RegisterSingleton<IWindowManager, WindowManager>();
-            base.Configure();
         }
 
         protected override IEnumerable<object> GetAllInstances(Type service)

@@ -111,6 +111,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\Account.cs" />
+    <Compile Include="Models\EntityBase.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
     <Page Include="Views\ShellView.xaml">
       <Generator>MSBuild:Compile</Generator>
