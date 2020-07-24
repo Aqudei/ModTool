@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace WpfProjectTemplate.Models
+namespace TextTool.Models
 {
     internal class Account : EntityBase
     {

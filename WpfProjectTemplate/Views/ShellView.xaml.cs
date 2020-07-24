@@ -1,4 +1,4 @@
-﻿namespace WpfProjectTemplate.Views
+﻿namespace TextTool.Views
 {
     /// <summary>
     /// Interaction logic for ShellView.xaml
