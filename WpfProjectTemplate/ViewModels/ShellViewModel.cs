@@ -139,6 +139,16 @@ namespace ModItemCreationTool.ViewModels
 
         }
 
+        public void Reset()
+        {
+            ModConfigFilePath = "";
+            Description = "";
+            NewName = "";
+            ModId = "";
+            InputFolder = "";
+            DestinationFolder = "";
+        }
+
         private void CleanUp(string tempDirectory)
         {
             var locales = Path.Combine(tempDirectory, "locales");

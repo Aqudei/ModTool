@@ -27,7 +27,9 @@
     <MapFileExtensions>true</MapFileExtensions>
     <InstallUrl>https://github.com/Aqudei/ModTool/raw/master/WpfProjectTemplate/publish/</InstallUrl>
     <UpdateUrl>https://github.com/Aqudei/ModTool/raw/master/WpfProjectTemplate/publish/</UpdateUrl>
-    <ApplicationRevision>12</ApplicationRevision>
+    <ProductName>Mod Item Creation Tool</ProductName>
+    <PublisherName>Shade Corps.</PublisherName>
+    <ApplicationRevision>13</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>

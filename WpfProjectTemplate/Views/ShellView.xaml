@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ModItemCreationTool"
         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
         mc:Ignorable="d"
-        Title="Text Tool" Height="400.042" Width="487.526">
+        Title="Mod Item Creation Tool" Height="400.042" Width="487.526">
     <mah:MetroWindow.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </mah:MetroWindow.Resources>
@@ -15,18 +15,19 @@
     <Grid>
 
 
-        <TextBox x:Name="ModId" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="365" Margin="10,34,0,0" mah:TextBoxHelper.IsWaitingForData="True" mah:TextBoxHelper.Watermark="Search (Mod Id)"/>
-        <TextBox x:Name="DestinationFolder" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="365" Margin="10,96,0,0" mah:TextBoxHelper.Watermark="Destination Folder"/>
-        <TextBox x:Name="NewName" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="365" Margin="10,127,0,0" mah:TextBoxHelper.IsWaitingForData="True" mah:TextBoxHelper.Watermark="New Mod Name"/>
-        <Button x:Name="Run" Content="RUN" HorizontalAlignment="Left" Margin="10,299,0,0" VerticalAlignment="Top" Width="452"/>
-        <Button x:Name="BrowseDestinationFolder" Content="Browse" HorizontalAlignment="Left" Margin="387,96,0,0" VerticalAlignment="Top" Width="75"/>
-        <TextBox x:Name="Description" HorizontalAlignment="Left" Height="81" TextWrapping="Wrap" VerticalAlignment="Top" Width="365" Margin="10,189,0,0" mah:TextBoxHelper.IsWaitingForData="True" mah:TextBoxHelper.Watermark="Description"/>
-        <TextBox x:Name="InputFolder" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="365" Margin="10,65,0,0" mah:TextBoxHelper.IsWaitingForData="True" mah:TextBoxHelper.Watermark="Input Folder"/>
-        <Button x:Name="BrowseInputFolder" Content="Browse" HorizontalAlignment="Left" Margin="387,64,0,0" VerticalAlignment="Top" Width="75"/>
+        <TextBox x:Name="ModId" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="365" Margin="10,34,0,0" mah:TextBoxHelper.IsWaitingForData="True" mah:TextBoxHelper.Watermark="Search (Mod Id)" TabIndex="1"/>
+        <TextBox x:Name="DestinationFolder" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="365" Margin="10,96,0,0" mah:TextBoxHelper.Watermark="Destination Folder" TabIndex="4"/>
+        <TextBox x:Name="NewName" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="365" Margin="10,127,0,0" mah:TextBoxHelper.IsWaitingForData="True" mah:TextBoxHelper.Watermark="New Mod Name" TabIndex="6"/>
+        <Button x:Name="Run" Content="RUN" HorizontalAlignment="Left" Margin="278,299,0,0" VerticalAlignment="Top" Width="184" TabIndex="10"/>
+        <Button x:Name="BrowseDestinationFolder" Content="Browse" HorizontalAlignment="Left" Margin="387,96,0,0" VerticalAlignment="Top" Width="75" TabIndex="5"/>
+        <TextBox x:Name="Description" HorizontalAlignment="Left" Height="81" TextWrapping="Wrap" VerticalAlignment="Top" Width="365" Margin="10,189,0,0" mah:TextBoxHelper.IsWaitingForData="True" mah:TextBoxHelper.Watermark="Description" TabIndex="9"/>
+        <TextBox x:Name="InputFolder" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="365" Margin="10,65,0,0" mah:TextBoxHelper.IsWaitingForData="True" mah:TextBoxHelper.Watermark="Input Folder" TabIndex="2"/>
+        <Button x:Name="BrowseInputFolder" Content="Browse" HorizontalAlignment="Left" Margin="387,64,0,0" VerticalAlignment="Top" Width="75" TabIndex="3"/>
         <ProgressBar Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" 
                               HorizontalAlignment="Left" Height="19" Margin="10,339,0,0" VerticalAlignment="Top" Width="452" IsIndeterminate="True"/>
-        <TextBox x:Name="ModConfigFilePath" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="365" Margin="10,158,0,0" mah:TextBoxHelper.IsWaitingForData="True" mah:TextBoxHelper.Watermark="Mod Config Path"/>
-        <Button x:Name="BrowseConfigFile" Content="Browse" HorizontalAlignment="Left" Margin="387,158,0,0" VerticalAlignment="Top" Width="75"/>
+        <TextBox x:Name="ModConfigFilePath" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="365" Margin="10,158,0,0" mah:TextBoxHelper.IsWaitingForData="True" mah:TextBoxHelper.Watermark="Mod Config Path" TabIndex="7"/>
+        <Button x:Name="BrowseConfigFile" Content="Browse" HorizontalAlignment="Left" Margin="387,158,0,0" VerticalAlignment="Top" Width="75" TabIndex="8"/>
+        <Button x:Name="Reset" Content="Reset" HorizontalAlignment="Left" Margin="10,299,0,0" VerticalAlignment="Top" Width="184"/>
 
     </Grid>
 

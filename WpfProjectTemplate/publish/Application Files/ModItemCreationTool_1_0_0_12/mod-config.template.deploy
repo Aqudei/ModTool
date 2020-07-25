@@ -1,0 +1,32 @@
+{
+  "name": "{modname}",
+  "author": "{author}",
+  "description": "In-progress",
+  "license": "MIT",
+  "version": "1.0.0",
+  "dependencies": [],
+  "db": {
+    "items": {
+      "GS18M": "db/items/{modname}.json"
+    },
+    "locales": {
+      "en": {
+        "templates": {
+          "{modname}": "db/locales/en/templates/{modname}.json"
+        }
+      }
+    },
+    "assort": {
+      "ragfair": {
+        "items": {
+          "{modname}": "db/assort/ragfair/items/{modname}.json"
+        }
+      }
+    },
+    "templates": {
+      "items": {
+        "{modname}": "db/templates/items/{modname}.json"
+      }
+    }
+  }
+}
