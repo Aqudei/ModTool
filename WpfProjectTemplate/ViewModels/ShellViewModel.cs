@@ -2,16 +2,11 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Caliburn.Micro;
 using Microsoft.WindowsAPICodePack.Dialogs;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Unity.Injection;
 
 namespace ModItemCreationTool.ViewModels
 {
