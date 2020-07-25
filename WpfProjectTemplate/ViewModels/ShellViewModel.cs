@@ -18,9 +18,16 @@ namespace TextTool.ViewModels
 
     class ShellViewModel : Screen
     {
+#if DEBUG
         private string destinationFolder = "D:\\Downloads\\Compressed\\Upwork Reference Material\\dbout";
         private string inputFolder = "D:\\Downloads\\Compressed\\Upwork Reference Material\\db";
         private string modId = "5a0abb6e1526d8000a025282";
+#else
+        private string destinationFolder ;
+        private string inputFolder;
+        private string modId;
+#endif
+
         private string newName;
         private string description;
         private bool isBusy;
