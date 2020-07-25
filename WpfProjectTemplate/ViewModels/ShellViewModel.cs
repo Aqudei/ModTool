@@ -23,7 +23,7 @@ namespace TextTool.ViewModels
         private string inputFolder = "D:\\Downloads\\Compressed\\Upwork Reference Material\\db";
         private string modId = "5a0abb6e1526d8000a025282";
 #else
-        private string destinationFolder ;
+        private string destinationFolder;
         private string inputFolder;
         private string modId;
 #endif
@@ -41,11 +41,11 @@ namespace TextTool.ViewModels
 
         private string Replace(string content, string key, string value)
         {
-            var regex = new Regex($"\"{key}\"\\s*:.+\",");
+            var regex = new Regex($"\"{key}\"\\s*:.+\"", RegexOptions.IgnoreCase);
             var match = regex.Match(content);
             if (match.Success)
             {
-                return content.Replace(match.Value, $"\"{key}\": $\"{value}\",");
+                return content.Replace(match.Value, $"\"{key}\": \"{value}\"");
             }
             return content;
         }
@@ -69,11 +69,11 @@ namespace TextTool.ViewModels
                         File.Copy(file, destiFile, true);
 
                         var content = File.ReadAllText(destiFile);
-                        content = Replace(content, "_id", basename);
-                        content = Replace(content, "_tpl", basename);
-                        content = Replace(content, "Id", basename);
-                        content = Replace(content, "_name", basename);
-                        content = Replace(content, "ShortName", basename);
+                        content = Replace(content, "_id", NewName);
+                        content = Replace(content, "_tpl", NewName);
+                        content = Replace(content, "Id", NewName);
+                        content = Replace(content, "_name", NewName);
+                        content = Replace(content, "ShortName", NewName);
                         content = Replace(content, "Description", Description);
                         File.WriteAllText(destiFile, content);
                     }
