@@ -22,15 +22,18 @@ namespace TextTool.ViewModels
         private string destinationFolder = "D:\\Downloads\\Compressed\\Upwork Reference Material\\dbout";
         private string inputFolder = "D:\\Downloads\\Compressed\\Upwork Reference Material\\db";
         private string modId = "5a0abb6e1526d8000a025282";
+        private string modConfigPath = @"D:\Downloads\Compressed\StraitSix-GS18M-1.0.0\mod.config.json";
 #else
         private string destinationFolder;
         private string inputFolder;
         private string modId;
+        private string modConfigPath;
 #endif
 
         private string newName;
         private string description;
         private bool isBusy;
+
 
         public string DestinationFolder { get => destinationFolder; set => Set(ref destinationFolder, value.Trim("\\/ ".ToCharArray())); }
         public string InputFolder { get => inputFolder; set => Set(ref inputFolder, value.Trim("\\/ ".ToCharArray())); }
@@ -38,6 +41,7 @@ namespace TextTool.ViewModels
         public string NewName { get => newName; set => Set(ref newName, value); }
         public string Description { get => description; set => Set(ref description, value); }
         public bool IsBusy { get => isBusy; set => Set(ref isBusy, value); }
+        public string ModConfigFilePath { get => modConfigPath; set => Set(ref modConfigPath, value); }
 
         private string Replace(string content, string key, string value)
         {
@@ -61,12 +65,27 @@ namespace TextTool.ViewModels
             return false;
         }
 
-        private void GenModConfig(string dir, string modName, string author)
+        private void GenModConfig(string dir, string modName)
         {
-            var content = File.ReadAllText("./mod-config.template");
-            content = content.Replace("{modname}", modName)
-                .Replace("{author}", author);
-            File.WriteAllText(Path.Combine(dir, "mod.config.json"), content);
+            var json = JObject.Parse(File.ReadAllText(ModConfigFilePath));
+
+            json["db"]["items"][modName] = $"db/items/{modName}.json";
+            json["db"]["locales"]["en"]["templates"][modName] = $"db/locales/en/templates/{modName}.json";
+            json["db"]["assort"]["ragfair"]["items"][modName] = $"db/assort/ragfair/items/{modName}.json";
+            json["db"]["templates"]["items"][modName] = $"db/templates/items/{modName}.json";
+
+            File.WriteAllText(ModConfigFilePath, json.ToString());
+        }
+
+        public void BrowseConfigFile()
+        {
+            var dlg = new CommonOpenFileDialog();
+            var rslt = dlg.ShowDialog();
+            if (rslt != CommonFileDialogResult.Ok)
+            {
+                return;
+            }
+            ModConfigFilePath = dlg.FileName;
         }
 
 
@@ -111,7 +130,8 @@ namespace TextTool.ViewModels
                         File.WriteAllText(destiFile, content);
                     }
 
-                    GenModConfig(tempDirectory, newName, "");
+                    GenModConfig(tempDirectory, newName);
+                    CleanUp(tempDirectory);
                     Process.Start("xcopy", $"\"{tempDirectory}\" \"{DestinationFolder}\" /s /i /Y");
                 }
                 finally
@@ -123,7 +143,28 @@ namespace TextTool.ViewModels
 
         }
 
+        private void CleanUp(string tempDirectory)
+        {
+            var locales = Path.Combine(tempDirectory, "locales");
+            foreach (var directory in Directory.GetDirectories(locales))
+            {
+                var directoryName = Path.GetFileName(directory);
+                if (directoryName != "en")
+                {
+                    Directory.Delete(directory, true);
+                }
+            }
 
+            var assort = Path.Combine(tempDirectory, "assort");
+            foreach (var directory in Directory.GetDirectories(locales))
+            {
+                var directoryName = Path.GetFileName(directory);
+                if (directoryName != "ragfair")
+                {
+                    Directory.Delete(directory, true);
+                }
+            }
+        }
 
         public void BrowseDestinationFolder()
         {
