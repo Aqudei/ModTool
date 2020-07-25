@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace TextTool.Models
+namespace ModItemCreationTool.Models
 {
     internal class Account : EntityBase
     {

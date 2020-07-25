@@ -1,4 +1,4 @@
-﻿namespace TextTool.Views
+﻿namespace ModItemCreationTool.Views
 {
     /// <summary>
     /// Interaction logic for ShellView.xaml

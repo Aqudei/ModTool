@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TextTool.Models
+namespace ModItemCreationTool.Models
 {
     abstract class EntityBase
     {

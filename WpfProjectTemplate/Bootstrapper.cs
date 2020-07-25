@@ -8,9 +8,9 @@ using AutoMapper;
 using Caliburn.Micro;
 using MahApps.Metro.Controls.Dialogs;
 using Unity;
-using TextTool.ViewModels;
+using ModItemCreationTool.ViewModels;
 
-namespace TextTool
+namespace ModItemCreationTool
 {
     class Bootstrapper : BootstrapperBase
     {

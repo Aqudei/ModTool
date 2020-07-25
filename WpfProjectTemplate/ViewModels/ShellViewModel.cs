@@ -13,7 +13,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Unity.Injection;
 
-namespace TextTool.ViewModels
+namespace ModItemCreationTool.ViewModels
 {
 
     class ShellViewModel : Screen
@@ -126,6 +126,7 @@ namespace TextTool.ViewModels
                         content = Replace(content, "Id", NewName);
                         content = Replace(content, "_name", NewName);
                         content = Replace(content, "ShortName", NewName);
+                        content = Replace(content, "Name", NewName);
                         content = Replace(content, "Description", Description);
                         File.WriteAllText(destiFile, content);
                     }
