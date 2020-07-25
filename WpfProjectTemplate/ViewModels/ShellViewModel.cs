@@ -156,10 +156,20 @@ namespace TextTool.ViewModels
             }
 
             var assort = Path.Combine(tempDirectory, "assort");
-            foreach (var directory in Directory.GetDirectories(locales))
+            foreach (var directory in Directory.GetDirectories(assort))
             {
                 var directoryName = Path.GetFileName(directory);
                 if (directoryName != "ragfair")
+                {
+                    Directory.Delete(directory, true);
+                }
+            }
+
+            var assortRagfair = Path.Combine(tempDirectory, "assort", "ragfair");
+            foreach (var directory in Directory.GetDirectories(assortRagfair))
+            {
+                var directoryName = Path.GetFileName(directory);
+                if (directoryName != "items")
                 {
                     Directory.Delete(directory, true);
                 }
