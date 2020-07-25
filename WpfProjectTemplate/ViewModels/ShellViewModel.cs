@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Caliburn.Micro;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Unity.Injection;
 
 namespace TextTool.ViewModels
 {
@@ -18,35 +22,65 @@ namespace TextTool.ViewModels
         private string inputFolder = "D:\\Downloads\\Compressed\\Upwork Reference Material\\db";
         private string modId = "5a0abb6e1526d8000a025282";
         private string newName;
+        private string description;
+        private bool isBusy;
 
         public string DestinationFolder { get => destinationFolder; set => Set(ref destinationFolder, value.Trim("\\/ ".ToCharArray())); }
         public string InputFolder { get => inputFolder; set => Set(ref inputFolder, value.Trim("\\/ ".ToCharArray())); }
         public string ModId { get => modId; set => Set(ref modId, value); }
         public string NewName { get => newName; set => Set(ref newName, value); }
+        public string Description { get => description; set => Set(ref description, value); }
+        public bool IsBusy { get => isBusy; set => Set(ref isBusy, value); }
 
-
-        public void Run()
+        private string Replace(string content, string key, string value)
         {
-            var files = Directory.EnumerateFiles(InputFolder, $"*{ModId}*", SearchOption.AllDirectories);
-            foreach (var file in files)
+            var regex = new Regex($"\"{key}\"\\s*:.+\",");
+            var match = regex.Match(content);
+            if (match.Success)
             {
-                Console.WriteLine($"Copying {file}");
-                var basename = Path.GetFileNameWithoutExtension(file);
-                var destiFile = file.Replace(inputFolder, DestinationFolder).Replace(basename, NewName);
-                Console.WriteLine($"\tTo {destiFile}");
-                File.Copy(file, destiFile, true);
-
-                var json = JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(destiFile));
-                if (json.ContainsKey("_id"))
-                {
-                    json["_id"] = newName;
-                }
-                if (json.ContainsKey("_tpl"))
-                {
-                    json["_tpl"] = newName;
-                }
+                return content.Replace(match.Value, $"\"{key}\": $\"{value}\",");
             }
+            return content;
         }
+
+        public IEnumerable<IResult> Run()
+        {
+
+            yield return Task.Run(() =>
+            {
+                try
+                {
+                    Execute.OnUIThread(() => IsBusy = true);
+                    var files = Directory.EnumerateFiles(InputFolder, $"*{ModId}*", SearchOption.AllDirectories);
+                    foreach (var file in files)
+                    {
+                        Console.WriteLine($"Copying {file}");
+                        var basename = Path.GetFileNameWithoutExtension(file);
+                        var destiFile = file.Replace(inputFolder, DestinationFolder).Replace(basename, NewName);
+                        Console.WriteLine($"\tTo {destiFile}");
+                        Directory.CreateDirectory(Path.GetDirectoryName(destiFile));
+                        File.Copy(file, destiFile, true);
+
+                        var content = File.ReadAllText(destiFile);
+                        content = Replace(content, "_id", basename);
+                        content = Replace(content, "_tpl", basename);
+                        content = Replace(content, "Id", basename);
+                        content = Replace(content, "_name", basename);
+                        content = Replace(content, "ShortName", basename);
+                        content = Replace(content, "Description", Description);
+                        File.WriteAllText(destiFile, content);
+                    }
+                }
+                finally
+                {
+                    Execute.OnUIThread(() => IsBusy = false);
+                    Process.Start("explorer.exe", $"\"{DestinationFolder}\"");
+                }
+            }).AsResult();
+
+        }
+
+
 
         public void BrowseDestinationFolder()
         {
