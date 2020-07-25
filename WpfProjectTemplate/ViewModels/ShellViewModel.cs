@@ -50,17 +50,39 @@ namespace TextTool.ViewModels
             return content;
         }
 
+        private bool IsValidDirectory(IEnumerable<string> lookup, string dirName)
+        {
+            foreach (var item in lookup)
+            {
+                if (dirName.StartsWith(item))
+                    return true;
+            }
+
+            return false;
+        }
+
         public IEnumerable<IResult> Run()
         {
-
+            var folders = new string[] { "templates", "locales", "items", "assort" };
             yield return Task.Run(() =>
             {
                 try
                 {
                     Execute.OnUIThread(() => IsBusy = true);
-                    var files = Directory.EnumerateFiles(InputFolder, $"*{ModId}*", SearchOption.AllDirectories);
+                    var files = Directory.EnumerateFiles(InputFolder, $"*{ModId}*.json", SearchOption.AllDirectories);
+                    var validDirectories = new List<string>();
+
+                    foreach (var folderName in folders)
+                    {
+                        validDirectories.Add(Path.Combine(InputFolder, folderName).Trim(" \\/".ToCharArray()));
+                    }
+
                     foreach (var file in files)
                     {
+                        var directoryName = Path.GetDirectoryName(file).Trim(" \\/".ToCharArray());
+                        if (!IsValidDirectory(validDirectories, directoryName))
+                            continue;
+
                         Console.WriteLine($"Copying {file}");
                         var basename = Path.GetFileNameWithoutExtension(file);
                         var destiFile = file.Replace(inputFolder, DestinationFolder).Replace(basename, NewName);
