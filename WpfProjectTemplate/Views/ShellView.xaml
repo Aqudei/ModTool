@@ -23,7 +23,7 @@
         <TextBox x:Name="Description" HorizontalAlignment="Left" Height="81" TextWrapping="Wrap" VerticalAlignment="Top" Width="365" Margin="10,158,0,0" mah:TextBoxHelper.IsWaitingForData="True" mah:TextBoxHelper.Watermark="Description"/>
         <TextBox x:Name="InputFolder" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="365" Margin="10,65,0,0" mah:TextBoxHelper.IsWaitingForData="True" mah:TextBoxHelper.Watermark="Input Folder"/>
         <Button x:Name="BrowseInputFolder" Content="Browse" HorizontalAlignment="Left" Margin="387,64,0,0" VerticalAlignment="Top" Width="75"/>
-        <mah:MetroProgressBar Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" 
+        <ProgressBar Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" 
                               HorizontalAlignment="Left" Height="19" Margin="10,293,0,0" VerticalAlignment="Top" Width="452" IsIndeterminate="True"/>
 
     </Grid>

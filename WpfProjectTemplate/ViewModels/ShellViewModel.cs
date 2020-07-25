@@ -61,9 +61,20 @@ namespace TextTool.ViewModels
             return false;
         }
 
+        private void GenModConfig(string dir, string modName, string author)
+        {
+            var content = File.ReadAllText("./mod-config.template");
+            content = content.Replace("{modname}", modName)
+                .Replace("{author}", author);
+            File.WriteAllText(Path.Combine(dir, "mod.config.json"), content);
+        }
+
+
         public IEnumerable<IResult> Run()
         {
             var folders = new string[] { "templates", "locales", "items", "assort" };
+            var tempDirectory = Path.Combine(Path.GetTempPath(), DateTime.Now.ToString()
+                .Replace("/", "-").Replace(" ", "-").Replace(":", "-"));
             yield return Task.Run(() =>
             {
                 try
@@ -85,7 +96,7 @@ namespace TextTool.ViewModels
 
                         Console.WriteLine($"Copying {file}");
                         var basename = Path.GetFileNameWithoutExtension(file);
-                        var destiFile = file.Replace(inputFolder, DestinationFolder).Replace(basename, NewName);
+                        var destiFile = file.Replace(inputFolder, tempDirectory).Replace(basename, NewName);
                         Console.WriteLine($"\tTo {destiFile}");
                         Directory.CreateDirectory(Path.GetDirectoryName(destiFile));
                         File.Copy(file, destiFile, true);
@@ -99,6 +110,9 @@ namespace TextTool.ViewModels
                         content = Replace(content, "Description", Description);
                         File.WriteAllText(destiFile, content);
                     }
+
+                    GenModConfig(tempDirectory, newName, "");
+                    Process.Start("xcopy", $"\"{tempDirectory}\" \"{DestinationFolder}\" /s /i /Y");
                 }
                 finally
                 {
