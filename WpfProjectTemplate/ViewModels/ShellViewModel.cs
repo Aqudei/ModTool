@@ -14,29 +14,74 @@ namespace ModItemCreationTool.ViewModels
     class ShellViewModel : Screen
     {
 #if DEBUG
-        private string destinationFolder = "D:\\Downloads\\Compressed\\Upwork Reference Material\\dbout";
-        private string inputFolder = "D:\\Downloads\\Compressed\\Upwork Reference Material\\db";
-        private string modId = "5a0abb6e1526d8000a025282";
-        private string modConfigPath = @"D:\Downloads\Compressed\StraitSix-GS18M-1.0.0\mod.config.json";
+        private string _destinationFolder = "D:\\Downloads\\Compressed\\Upwork Reference Material";
+        private string _inputFolder = "D:\\Downloads\\Compressed\\Upwork Reference Material";
+        private string _modId = "5a0abb6e1526d8000a025282";
+        private string _modConfigPath = @"D:\Downloads\Compressed\StraitSix-GS18M-1.0.0\mod.config.json";
 #else
-        private string destinationFolder;
-        private string inputFolder;
-        private string modId;
-        private string modConfigPath;
+        private string _destinationFolder;
+        private string _inputFolder;
+        private string _modId;
+        private string _modConfigPath;
 #endif
 
-        private string newName;
-        private string description;
-        private bool isBusy;
+        private string _newName;
+        private string _description;
+        private bool _isBusy;
 
 
-        public string DestinationFolder { get => destinationFolder; set => Set(ref destinationFolder, value.Trim("\\/ ".ToCharArray())); }
-        public string InputFolder { get => inputFolder; set => Set(ref inputFolder, value.Trim("\\/ ".ToCharArray())); }
-        public string ModId { get => modId; set => Set(ref modId, value); }
-        public string NewName { get => newName; set => Set(ref newName, value); }
-        public string Description { get => description; set => Set(ref description, value); }
-        public bool IsBusy { get => isBusy; set => Set(ref isBusy, value); }
-        public string ModConfigFilePath { get => modConfigPath; set => Set(ref modConfigPath, value); }
+        public string DestinationFolder
+        {
+            get => _destinationFolder;
+            set
+            {
+                Set(ref _destinationFolder, value.Trim("\\/ ".ToCharArray()));
+                NotifyOfPropertyChange(nameof(CanRun));
+            }
+        }
+
+        public string InputFolder
+        {
+            get => _inputFolder;
+            set
+            {
+                Set(ref _inputFolder, value.Trim("\\/ ".ToCharArray()));
+                NotifyOfPropertyChange(nameof(CanRun));
+            }
+        }
+
+        public string ModId
+        {
+            get => _modId;
+            set
+            {
+                Set(ref _modId, value);
+                NotifyOfPropertyChange(nameof(CanRun));
+            }
+        }
+
+        public string NewName
+        {
+            get => _newName;
+            set
+            {
+                Set(ref _newName, value);
+                NotifyOfPropertyChange(nameof(CanRun));
+            }
+        }
+
+        public string Description
+        {
+            get => _description;
+            set
+            {
+                Set(ref _description, value);
+                NotifyOfPropertyChange(nameof(CanRun));
+            }
+        }
+
+        public bool IsBusy { get => _isBusy; set => Set(ref _isBusy, value); }
+        public string ModConfigFilePath { get => _modConfigPath; set => Set(ref _modConfigPath, value); }
 
         private string Replace(string content, string key, string value)
         {
@@ -62,6 +107,13 @@ namespace ModItemCreationTool.ViewModels
 
         private void GenModConfig(string dir, string modName)
         {
+            if (!File.Exists(ModConfigFilePath))
+            {
+                var configJson = File.ReadAllText("./mod-config.template");
+                configJson = configJson.Replace("{modname}", modName);
+                File.WriteAllText(Path.Combine(DestinationFolder, "mod.config.json"), configJson);
+                return;
+            }
             var json = JObject.Parse(File.ReadAllText(ModConfigFilePath));
 
             json["db"]["items"][modName] = $"db/items/{modName}.json";
@@ -110,7 +162,7 @@ namespace ModItemCreationTool.ViewModels
 
                         Console.WriteLine($"Copying {file}");
                         var basename = Path.GetFileNameWithoutExtension(file);
-                        var destiFile = file.Replace(inputFolder, tempDirectory).Replace(basename, NewName);
+                        var destiFile = file.Replace(_inputFolder, tempDirectory).Replace(basename, NewName);
                         Console.WriteLine($"\tTo {destiFile}");
                         Directory.CreateDirectory(Path.GetDirectoryName(destiFile));
                         File.Copy(file, destiFile, true);
@@ -126,9 +178,15 @@ namespace ModItemCreationTool.ViewModels
                         File.WriteAllText(destiFile, content);
                     }
 
-                    GenModConfig(tempDirectory, newName);
+                    GenModConfig(tempDirectory, _newName);
                     CleanUp(tempDirectory);
-                    Process.Start("xcopy", $"\"{tempDirectory}\" \"{DestinationFolder}\" /s /i /Y");
+                    var dbDirectory = Path.Combine(DestinationFolder, "db");
+                    if (!Directory.Exists(dbDirectory))
+                    {
+                        Directory.CreateDirectory(dbDirectory);
+                    }
+
+                    Process.Start("xcopy", $"\"{tempDirectory}\" \"{dbDirectory}\" /s /i /Y");
                 }
                 finally
                 {
@@ -136,8 +194,12 @@ namespace ModItemCreationTool.ViewModels
                     Process.Start("explorer.exe", $"\"{DestinationFolder}\"");
                 }
             }).AsResult();
-
         }
+
+        public bool CanRun => !string.IsNullOrWhiteSpace(DestinationFolder) &&
+                              !string.IsNullOrWhiteSpace(InputFolder) &&
+                              !string.IsNullOrWhiteSpace(NewName) &&
+                              !string.IsNullOrWhiteSpace(ModId);
 
         public void Reset()
         {
